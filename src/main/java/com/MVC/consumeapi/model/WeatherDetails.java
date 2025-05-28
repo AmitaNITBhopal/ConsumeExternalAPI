@@ -3,16 +3,14 @@ package com.MVC.consumeapi.model;
 import java.util.ArrayList;
 import java.util.Date;
 
-
-
-public class Response {
+public class WeatherDetails {
 	public String version;
 	public String user;
     public Date dateGenerated;
     public String status;
     public ArrayList<Datum> data;
     
-    public Response(String version, String user, Date dateGenerated, String status, ArrayList<Datum> data) {
+    public WeatherDetails(String version, String user, Date dateGenerated, String status, ArrayList<Datum> data) {
 		super();
 		this.version = version;
 		this.user = user;
@@ -23,7 +21,7 @@ public class Response {
     
 	@Override
 	public String toString() {
-		return "Response [version=" + version + ", user=" + user + ", dateGenerated=" + dateGenerated + ", status="
+		return "WeatherDetails [version=" + version + ", user=" + user + ", dateGenerated=" + dateGenerated + ", status="
 				+ status + ", data=" + data + "]";
 	}
 	
@@ -59,5 +57,3 @@ public class Response {
 	}
 
 }
-
-
