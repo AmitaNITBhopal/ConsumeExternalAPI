@@ -7,9 +7,13 @@
 <body>
 <h1>haha haha</h1>
 <p> text is <span th:text="${test}">failed</span></p>
-<p> city is <span th:text="${locationName.City}">jhkhk</span></p>
-<p> country is <span th:text="${locationName.Country}">jhkhk</span></p>
+<p> city is <span th:text="${locationName.name}">jhkhk</span></p>
+<p> country is <span th:text="${locationName.country}">jhkhk</span></p>
+<p> latitude is <span th:text="${locationName.latitude}">jhkhk</span></p>
+<p> longitude is <span th:text="${locationName.longitude}">jhkhk</span></p>
 
+<iframe th:src="${filename}"></iframe>
+<p> temperature is <span th:text="${weatherDtls}">jhkhk</span></p>
  
 </body>
 </html>

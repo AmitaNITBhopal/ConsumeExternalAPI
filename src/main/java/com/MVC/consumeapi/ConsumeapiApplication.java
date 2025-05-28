@@ -18,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
+import com.MVC.consumeapi.controller.LatLongAPIController;
 import com.MVC.consumeapi.controller.WeatherAPIController;
 
 
@@ -32,8 +33,12 @@ public class ConsumeapiApplication {
 		 * context.getBean(WeatherAPIController.class);
 		 * System.out.println(weatherAPIController.GetWeatherDetails());
 		 */
-        //URL url = uri.toURL();
 		
+		/*
+		 * LatLongAPIController latLongAPIController =
+		 * context.getBean(LatLongAPIController.class);
+		 * System.out.println(latLongAPIController.getLatLong("Thane", "India"));
+		 */
 	}
 
 }
