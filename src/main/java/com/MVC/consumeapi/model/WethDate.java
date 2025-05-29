@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class WethDate {
 	public Date date;
-	public double value;
+	public Object value;
 	
-	public WethDate(Date date, double value) {
+	public WethDate(Date date, Object value) {
 		super();
 		this.date = date;
 		this.value = value;
@@ -18,15 +18,15 @@ public class WethDate {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public double getValue() {
+	public Object getValue() {
 		return value;
 	}
-	public void setValue(double value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 	@Override
 	public String toString() {
-		return "WethDate [date=" + date + ", value=" + value + "]";
+		return "WethDate [date=" + date + ", value=" + value.toString() + "]";
 	}
 
 }

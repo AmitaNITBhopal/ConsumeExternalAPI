@@ -1,19 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert haha here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Weather Info</title>
+	<style>
+		tr {
+		  border-bottom: 1px solid #ddd;
+		}
+		th {
+		  text-align: left;
+		}
+	</style>
 </head>
-<body>
-<h1>haha haha</h1>
-<p> text is <span th:text="${test}">failed</span></p>
-<p> city is <span th:text="${locationName.name}">jhkhk</span></p>
-<p> country is <span th:text="${locationName.country}">jhkhk</span></p>
-<p> latitude is <span th:text="${locationName.latitude}">jhkhk</span></p>
-<p> longitude is <span th:text="${locationName.longitude}">jhkhk</span></p>
 
-<iframe th:src="${filename}"></iframe>
-<p> temperature is <span th:text="${weatherDtls}">jhkhk</span></p>
+
+<body>
+<h1> Location :</span></h1>
+<h3>City : <span th:text="${locationName.name}"></span></h3>
+<h3>Country : <span th:text="${locationName.country}"></span></h3>
+
+<h1>Weather Stats :</h1>
+<table class="table table-bordered table-striped">
+	<tr>
+		<th>Temperature</th>
+		<td th:text="${temperature}">junk</td>
+	</tr>
+	<tr>
+		<th>Max-Temperature</th>
+		<td th:text="${maxtemp}">junk</td>
+	</tr>
+	<tr>
+		<th>Min-Temperature</th>
+		<td th:text="${mintemp}">junk</td>
+	</tr>
+	<tr>
+		<th>Sunrise</th>
+		<td th:text="${sunrise}">junk</td>
+	</tr>
+	<tr>
+		<th>Sunset</th>
+		<td th:text="${sunset}">junk</td>
+	</tr>
+</table>
+
+<h1></h1>
+<h1>Weather Forecast for 7 days : </h1>
+
+<iframe th:src="${filename}" width="50%" height="200"></iframe>
+
  
 </body>
 </html>

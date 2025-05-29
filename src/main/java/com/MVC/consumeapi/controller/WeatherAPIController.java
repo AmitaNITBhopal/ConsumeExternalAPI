@@ -24,9 +24,12 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.MVC.consumeapi.model.Coordinate;
+import com.MVC.consumeapi.model.Datum;
 import com.MVC.consumeapi.model.LatLong;
 import com.MVC.consumeapi.model.LocationName;
 import com.MVC.consumeapi.model.WeatherDetails;
+import com.MVC.consumeapi.model.WethDate;
 
 @Controller
 public class WeatherAPIController {
@@ -34,6 +37,9 @@ public class WeatherAPIController {
 	final String BASEURL = "https://api.meteomatics.com/";
 	final String USERNAME = "applicationsavenues_singh_amita";
 	final String PASSWORD = "t6W4NHjQ4b";
+	final String FORMAT = "html";
+	final String FILESHORTNAME = "temp." + FORMAT;
+	final String FILELONGNAME = "src\\main\\resources\\static\\temp." + FORMAT;
 	
 	@Autowired
 	LatLongAPIController latLongAPIController;
@@ -60,15 +66,45 @@ public class WeatherAPIController {
 		  LatLong[] latLongarray = latLongAPIController.getLatLong(city, country);
 		  model.addAttribute("locationName", latLongarray[0]);
 		  model.addAttribute("test", "successful");
-			/*
-			 * WeatherDetails weatherDtls = GetWeatherDetails(latLongarray[0].getLatitude(),
-			 * latLongarray[0].getLongitude()); model.addAttribute("weatherDtls",
-			 * weatherDtls);
-			 */
+			
+		  WeatherDetails weatherDtls = GetWeatherDetails(latLongarray[0].getLatitude(), latLongarray[0].getLongitude()); 
+		  model.addAttribute("weatherDtls", weatherDtls);
+			 
+		  if(weatherDtls.data.size()>0) {
+			  for(Datum datum : weatherDtls.data) {
+				  switch(datum.getParameter()) {
+				  case "t_2m:C":
+					  model.addAttribute("temperature", datum.coordinates.get(0).dates.get(0).getValue());
+					  break;
+					  
+				  case "sunrise:sql":
+					  model.addAttribute("sunrise", datum.coordinates.get(0).dates.get(0).getValue());
+					  break;
+					  
+				  case "sunset:sql":
+					  model.addAttribute("sunset", datum.coordinates.get(0).dates.get(0).getValue());
+					  break;
+					  
+				  case "t_max_2m_24h:C":
+					  model.addAttribute("maxtemp", datum.coordinates.get(0).dates.get(0).getValue());
+					  break;
+					  
+				  case "t_min_2m_24h:C":
+					  model.addAttribute("mintemp", datum.coordinates.get(0).dates.get(0).getValue());
+					  break;
+					 
+				  default:
+						  model.addAttribute("nodata", "true");
+						  break;
+						  
+				  }
+			  }
+		  }
 		  
-		  String filepath = GetWeatherGraphPath(latLongarray[0].getLatitude(), latLongarray[0].getLongitude());
-		  model.addAttribute("filename",filepath);
-		  
+		  if(latLongarray != null) {
+			  String filepath = GetWeatherGraphPath(latLongarray[0].getLatitude(), latLongarray[0].getLongitude());
+			  model.addAttribute("filename",filepath);
+		  }
 		  return "locationdata";
 	  }
 	 
@@ -88,19 +124,19 @@ public class WeatherAPIController {
         
 		try {
 			Clock utcClock = Clock.systemUTC();
-								
-			//https://api.meteomatics.com/2025-05-26T11:20:00.000+02:00/t_2m:C/51.5073219,-0.1276474/html?model=mix
 			
-			uri = new URI(BASEURL + utcClock.instant() + "--" + utcClock.instant().plus(2, ChronoUnit.DAYS) + ":PT1H/t_2m:C/" + lat.longValue() + "," + longitude.longValue() + "/json");
+			uri = new URI(BASEURL + utcClock.instant() 
+					+ "/t_2m:C,sunrise:sql,sunset:sql,t_max_2m_24h:C,t_min_2m_24h:C/" 
+					+ lat.longValue() + "," + longitude.longValue() 
+					+ "/json");
 			RestClient restClient = RestClient.create();
 			weatherDetails = restClient.get()
 										.uri(uri).header("Authorization", "Basic " + encoding)
-										.accept(MediaType.APPLICATION_JSON)//.attribute("Authorization", "Basic " + encoding)
+										.accept(MediaType.APPLICATION_JSON)
 										.retrieve()
 										.body(WeatherDetails.class);
 			System.out.println(weatherDetails);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -109,21 +145,24 @@ public class WeatherAPIController {
 	
 	public String GetWeatherGraphPath(Double lat, Double longitude) {
 		URI uri;
-		String filename = "src\\main\\resources\\static\\temp.html";
+		String filename = FILELONGNAME;
 		String credentials = USERNAME + ":" + PASSWORD;
         String encoding = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
-        WeatherDetails weatherDetails = null;
         
 		try {
 			Clock utcClock = Clock.systemUTC();
 								
 			//https://api.meteomatics.com/2025-05-26T11:20:00.000+02:00/t_2m:C/51.5073219,-0.1276474/html?model=mix
 			
-			uri = new URI(BASEURL + utcClock.instant() + "--" + utcClock.instant().plus(2, ChronoUnit.DAYS) + ":PT1H/t_2m:C/" + lat.longValue() + "," + longitude.longValue() + "/html");
+			uri = new URI(BASEURL 
+					+ utcClock.instant() 
+					+ "P1W:PT1H/t_2m:C/" 
+					+ lat.longValue() + "," + longitude.longValue() 
+					+ "/" + FORMAT);
 			RestClient restClient = RestClient.create();
 			String htmlData = restClient.get()
 										.uri(uri).header("Authorization", "Basic " + encoding)
-										.accept(MediaType.APPLICATION_JSON)//.attribute("Authorization", "Basic " + encoding)
+										.accept(MediaType.APPLICATION_JSON)
 										.retrieve()
 										.body(String.class);
 			
@@ -144,11 +183,10 @@ public class WeatherAPIController {
 			
 			System.out.println(" inside GetWeatherGraphPath, no exceptions");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return "temp.html";
+		return FILESHORTNAME;
 	}
 	
 }

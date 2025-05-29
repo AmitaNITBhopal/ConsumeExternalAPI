@@ -29,7 +29,6 @@ public class LatLongAPIController {
 					.queryParam("country", "{country}")
 					.build(city,country);
 			
-			//uri = new URI("https://api.api-ninjas.com/v1/geocoding");
 			RestClient restClient = RestClient.create();
 			latLonglist = restClient.get()
 										.uri(uri)
@@ -39,7 +38,6 @@ public class LatLongAPIController {
 										.body(LatLong[].class);
 			System.out.println(latLonglist[0]);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
