@@ -60,9 +60,7 @@ public class WeatherAPIController {
 	  public String locationCapture(@ModelAttribute("city-name") String city, @ModelAttribute("country-name") String country, Model model) { 
 		  System.out.println("Inside locationCapture " + city + " " + country);
 		  
-		  //call lat long api and show that on screen
-		  //LocationName locationName = new LocationName(city, country);
-		  
+		  //call lat long api		  
 		  LatLong[] latLongarray = latLongAPIController.getLatLong(city, country);
 		  model.addAttribute("locationName", latLongarray[0]);
 		  model.addAttribute("test", "successful");
